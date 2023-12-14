@@ -144,7 +144,7 @@ function App() {
                     </Typography>
                     <img src={weather.icon} alt="" />
                   </div>
-                  <Typography variant="h6">{weather.description}</Typography>
+                  <Typography variant="h6">{t(weather.description)}</Typography>
                   <div
                     style={{
                       display: "flex",

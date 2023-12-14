@@ -1,5 +1,12 @@
 {
   "Al Malikea": "مالكية",
   "min": "الصغرة",
-  "max": "الكبرة"
+  "max": "الكبرة",
+  "clear sky": "سماء صافية",
+  "scattered clouds": "غيوم متفرقة",
+  "broken cloudsy": "غيوم متقطعة",
+  "shower rain": "مطر غزير",
+  "rain": "مطر",
+  "thunderstorm": "عاصفة رعدية",
+  "snow": "ثلج"
 }
