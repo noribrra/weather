@@ -1,6 +1,7 @@
 import "./App.css";
 import {
   Button,
+  CircularProgress,
   Container,
   createTheme,
   ThemeProvider,
@@ -8,9 +9,11 @@ import {
 } from "@mui/material";
 import CloudIcon from "@mui/icons-material/Cloud";
 import { useEffect, useState } from "react";
+// redux
+import { useSelector, useDispatch } from "react-redux";
+import { fearchweater } from "./features/apiweather/apiweather";
 
 // librrares
-import axios from "axios";
 import moment from "moment";
 import "moment/min/locales.min";
 import { useTranslation } from "react-i18next";
@@ -22,14 +25,13 @@ const THEME = createTheme({
 });
 
 function App() {
+  let use = useSelector((state) => state.axiosreduser);
+  const weather = use.weather;
+  const isloding = use.isloding;
+  const dispatch = useDispatch();
+
   const { t, i18n } = useTranslation();
-  const [weather, serweather] = useState({
-    temp: "",
-    min_temp: "",
-    max_temp: "",
-    description: "",
-    icon: "",
-  });
+
   const [time, settinme] = useState("");
   const [locale, setlocal] = useState("ar");
   const [dir, setdir] = useState("rtl");
@@ -51,44 +53,12 @@ function App() {
   }
 
   useEffect(() => {
+    settinme(moment().format("MMM Do "));
+    dispatch(fearchweater());
     moment.locale("ar");
     i18n.changeLanguage("ar");
   }, []);
-  useEffect(() => {
-    settinme(moment().format("MMM Do "));
 
-    let cancelaxios = null;
-    axios
-      .get(
-        "https://api.openweathermap.org/data/2.5/weather?lat=37.06782&lon=42.20226&appid=20da7496931a7bb17dce22eb3dbd7fc2",
-        {
-          cancelToken: new axios.CancelToken((c) => {
-            cancelaxios = c;
-          }),
-        }
-      )
-      .then(function (response) {
-        const temp = Math.round(response.data.main.temp - 272.15);
-        const min_temp = Math.round(response.data.main.temp_min - 272.15);
-        const max_temp = Math.round(response.data.main.temp_max - 272.15);
-        const description = response.data.weather[0].description;
-        const icon = response.data.weather[0].icon;
-
-        serweather({
-          temp,
-          min_temp,
-          max_temp,
-          description,
-          icon: `https://openweathermap.org/img/wn/${icon}@2x.png`,
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    return () => {
-      cancelaxios();
-    };
-  }, []);
   return (
     <div className="App">
       <ThemeProvider theme={THEME}>
@@ -131,6 +101,7 @@ function App() {
                 {/* digry and descraption */}
 
                 <div>
+                  {isloding ? <CircularProgress color="inherit" /> : ""}
                   <div
                     style={{
                       display: "flex",
